@@ -3,6 +3,7 @@ import { create } from 'zustand'
 interface PokedexState {
   favorites: number[]
   toggleFavorite: (id: number) => void
+  isFavorite: (id: number) => boolean
   searchQuery: string
   setSearchQuery: (query: string) => void
   selectedType: string
@@ -13,25 +14,24 @@ interface PokedexState {
   toggleShinyMode: () => void
 }
 
-export const usePokedexStore = create<PokedexState>((set) => ({
+export const usePokedexStore = create<PokedexState>()((set, get) => ({
   favorites: [],
-  toggleFavorite: (id: number) => set((state) => {
-    if (state.favorites.includes(id)) {
-      return { favorites: state.favorites.filter((favId) => favId !== id) }
-    } else {
-      return { favorites: [...state.favorites, id] }
-    }
-  }),
+  toggleFavorite: (id) => set((state) => ({
+    favorites: state.favorites.includes(id)
+      ? state.favorites.filter((f) => f !== id)
+      : [...state.favorites, id]
+  })),
+  isFavorite: (id) => get().favorites.includes(id),
 
   searchQuery: '',
-  setSearchQuery: (query: string) => set({ searchQuery: query }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
 
   selectedType: '',
-  setSelectedType: (type: string) => set({ selectedType: type }),
+  setSelectedType: (type) => set({ selectedType: type }),
 
   currentPage: 1,
-  setCurrentPage: (page: number) => set({ currentPage: page }),
+  setCurrentPage: (page) => set({ currentPage: page }),
 
   shinyMode: false,
-  toggleShinyMode: () => set((state) => ({ shinyMode: !state.shinyMode }))
+  toggleShinyMode: () => set((state) => ({ shinyMode: !state.shinyMode })),
 }))
