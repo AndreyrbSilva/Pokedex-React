@@ -2,10 +2,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import FavoritesPage from "./pages/FavoritesPage.tsx"
 import HomePage from "./pages/HomePage.tsx"
 import PokemonDetailPage from "./pages/PokemonDetailPage.tsx"
+import NavBar from "./components/NavBar.tsx"
 
 function App() {
   return (
     <BrowserRouter>
+      <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
