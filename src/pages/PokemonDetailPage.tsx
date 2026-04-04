@@ -5,7 +5,7 @@ import { usePokedexStore } from '../store/pokedexStore'
 function PokemonDetailPage() {
     const { id } = useParams()
     const { pokemon, loading, error } = usePokemon(id ?? '')
-    const { isFavorite, toggleFavorite } = usePokedexStore()
+    const { isFavorite, toggleFavorite, shinyMode } = usePokedexStore()
     if (loading) return <p>Loading...</p>
     if (error) return <p>Error: {error}</p>
     if (!pokemon) return <p>Pokémon não encontrado</p>
@@ -16,7 +16,7 @@ function PokemonDetailPage() {
             <p><a href="/">Voltar</a></p>
             <h1>Pokemon Detail</h1>
             <img
-                src={pokemon.sprites.other["official-artwork"].front_default}
+                src={shinyMode ? pokemon.sprites.other["official-artwork"].front_shiny : pokemon.sprites.other["official-artwork"].front_default}
                 alt={pokemon.name}
             />
             <h2 className='capitalize'>{pokemon.name}</h2>
