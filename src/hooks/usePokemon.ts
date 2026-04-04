@@ -50,12 +50,14 @@ export function usePokemonSpecies( idOrName: number | string ){
 }
 
 export function usePokemonList( offset: number, limit: number ){
+    const safeOffset = Math.min(offset, 1025)
+    const safeLimit = Math.min(limit, 1025 - safeOffset)  
     const[list, setList] = useState<{ name: string; url: string }[]>([])
     const[total, setTotal] = useState(0)
     const[loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`)
+        fetch(`https://pokeapi.co/api/v2/pokemon?offset=${safeOffset}&limit=${safeLimit}`)
           .then(data => data.json())
             .then(data => {
                 setList(data.results)
@@ -82,6 +84,7 @@ export function usePokemonByType( type: string ){
         const ids = data.pokemon.map((p: any) =>
           parseInt(p.pokemon.url.split('/').filter(Boolean).pop())
         )
+        .filter((id: number) => id <= 1025)
         setIds(ids)
         setLoading(false)
       })
