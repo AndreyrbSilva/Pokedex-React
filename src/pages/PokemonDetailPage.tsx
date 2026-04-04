@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { usePokemon } from "../hooks/usePokemon"
 import { usePokedexStore } from '../store/pokedexStore'
 
@@ -32,8 +32,12 @@ function PokemonDetailPage() {
                 <span key={abilityInfo.ability.name}>{abilityInfo.ability.name}</span>
             ))}</p>
             <div>
-                <p>Pokemon anterior</p>
-                <p>proximo pokemon</p>
+                {pokemon.id > 1 && (
+                <Link to={`/pokemon/${pokemon.id - 1}`}>←</Link>
+                )}
+                {pokemon.id < 1025 && (
+                <Link to={`/pokemon/${pokemon.id + 1}`}>→</Link>
+                )}
             </div>
         </div>
     )
