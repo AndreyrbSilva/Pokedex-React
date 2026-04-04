@@ -2,6 +2,7 @@ import PokemonCard from "../components/PokemonCard"
 import { usePokemonList, usePokemonByType } from "../hooks/usePokemon"
 import { usePokedexStore } from '../store/pokedexStore'
 import TypeFilter from "../components/TypeFilter"
+import { useState } from "react"
 
 export function HomePage() {
   const { currentPage, setCurrentPage, selectedType } = usePokedexStore()
@@ -11,6 +12,7 @@ export function HomePage() {
   ? ids.slice(currentPage * 24, (currentPage + 1) * 24)
   : list.map((p) => parseInt(p.url.split('/').filter(Boolean).pop()!))
   const totalItems = selectedType ? ids.length : Math.min(total, 1025)
+  const [search, setSearch] = useState('')
 
   if (loading) return <p>Loading...</p>
 
@@ -18,15 +20,22 @@ export function HomePage() {
     <div>
       <h1 className="text-2xl font-bold mb-6">Pokédex</h1>
       <form className="mb-4">
-        <input type="text" placeholder="Procure por nome ou ID" className="mb-4 p-2 border rounded w-full" />              
-        <submit className="px-4 py-2 bg-blue-500 text-white rounded">Search</submit>                   
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Procure por nome ou ID"
+          />
       </form>
       <TypeFilter />
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {displayIds.map((id) => (
-          <PokemonCard key={id} id={id} />
-        ))}
+        {search ? (
+          <PokemonCard key={search} id={search as any} />
+        ) : (
+          displayIds.map((id) => (
+            <PokemonCard key={id} id={id} />
+          ))
+        )}
       </div>
 
       <div className="flex justify-center mt-6">
