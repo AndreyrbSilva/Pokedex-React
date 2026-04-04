@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom"
 import { usePokemon } from "../hooks/usePokemon"
+import { usePokedexStore } from "../store/pokedexStore"
 
 export function PokemonCard({ id }: { id: number }) {
   const { pokemon, loading, error } = usePokemon(id)
+  const { shinyMode } = usePokedexStore()
 
   if (loading) {
     return (
@@ -25,7 +27,7 @@ export function PokemonCard({ id }: { id: number }) {
       <div className="pokemon-card">
 
         <img
-          src={pokemon.sprites.other["official-artwork"].front_default}
+          src={shinyMode ? pokemon.sprites.other["official-artwork"].front_shiny : pokemon.sprites.other["official-artwork"].front_default}
           alt={pokemon.name}
         />
 

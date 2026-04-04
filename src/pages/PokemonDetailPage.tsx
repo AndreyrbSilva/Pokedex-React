@@ -19,7 +19,7 @@ function PokemonDetailPage() {
                 src={pokemon.sprites.other["official-artwork"].front_default}
                 alt={pokemon.name}
             />
-            <h2>{pokemon.name}</h2>
+            <h2 className='capitalize'>{pokemon.name}</h2>
             <p>Favorite: <button onClick={() => toggleFavorite(pokemon.id)}>{fav ? 'Unfavorite' : 'Favorite'}</button></p>
             <p>Number: {pokemon.id}</p>
             <p>Types: {pokemon.types.map((typeInfo) => (
