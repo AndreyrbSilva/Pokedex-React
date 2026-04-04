@@ -8,7 +8,7 @@ export function NavBar() {
         <>
             <nav className="sticky top-0 flex items-center justify-between px-6 py-4 bg-gray-900">
                 <div className="">
-                    <Link to="/">Pokedex</Link>
+                    <Link className="text-white no-underline" to="/">Pokedex</Link>
                 </div>
                 <div className="flex gap-4">
                     <Link to="/favorites">Favorites</Link>
