@@ -66,3 +66,30 @@ export function usePokemonList( offset: number, limit: number ){
 
     return { list, total, loading };
 }
+
+export function usePokemonByType( type: string ){
+    const [ids, setIds] = useState<number[]>([])
+    const[loading, setLoading] = useState(true)
+    const[error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+    fetch(`https://pokeapi.co/api/v2/type/${type}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Tipo não encontrado')
+        return res.json()
+      })
+      .then((data) => {
+        const ids = data.pokemon.map((p: any) =>
+          parseInt(p.pokemon.url.split('/').filter(Boolean).pop())
+        )
+        setIds(ids)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [type])
+
+  return { ids, loading, error }
+}

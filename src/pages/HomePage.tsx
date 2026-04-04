@@ -1,10 +1,16 @@
 import PokemonCard from "../components/PokemonCard"
-import { usePokemonList } from "../hooks/usePokemon"
+import { usePokemonList, usePokemonByType } from "../hooks/usePokemon"
 import { usePokedexStore } from '../store/pokedexStore'
+import TypeFilter from "../components/TypeFilter"
 
 export function HomePage() {
-  const { currentPage, setCurrentPage } = usePokedexStore()
+  const { currentPage, setCurrentPage, selectedType } = usePokedexStore()
   const { list, total, loading } = usePokemonList(currentPage * 24, 24)
+  const { ids, loading: typeLoading } = usePokemonByType(selectedType)
+  const displayIds = selectedType
+  ? ids.slice(currentPage * 24, (currentPage + 1) * 24)
+  : list.map((p) => parseInt(p.url.split('/').filter(Boolean).pop()!))
+  const totalItems = selectedType ? ids.length : total
 
   if (loading) return <p>Loading...</p>
 
@@ -12,13 +18,14 @@ export function HomePage() {
     <div>
       <h1 className="text-2xl font-bold mb-6">Pokédex</h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {list.map((pokemon) => {
-          const id = pokemon.url.split("/")[6]
+      <TypeFilter />
 
-          return <PokemonCard key={id} id={Number(id)} />
-        })}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {displayIds.map((id) => (
+          <PokemonCard key={id} id={id} />
+        ))}
       </div>
+
       <div className="flex justify-center mt-6">
         {currentPage > 0 && (
           <button onClick={() => setCurrentPage(0)}>«</button>
@@ -31,17 +38,20 @@ export function HomePage() {
         >
           &lt;
         </button>
+
         <span className="mx-4">
-          Page {currentPage + 1} of {Math.ceil(total / 24)}
+          Page {currentPage + 1} of {Math.ceil(totalItems / 24)}
         </span>
+
         <button
           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
           onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={(currentPage + 1) * 24 >= total}
+          disabled={(currentPage + 1) * 24 >= totalItems}
         >
           &gt;
         </button>
-        <button onClick={() => setCurrentPage(Math.ceil(total / 24) - 1)}>»</button>
+
+        <button onClick={() => setCurrentPage(Math.ceil(totalItems / 24) - 1)}>»</button>
       </div>
     </div>
   )

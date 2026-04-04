@@ -13,6 +13,7 @@ function PokemonDetailPage() {
 
     return  (
         <div>
+            <p><a href="/">Voltar</a></p>
             <h1>Pokemon Detail</h1>
             <img
                 src={pokemon.sprites.other["official-artwork"].front_default}
@@ -30,6 +31,10 @@ function PokemonDetailPage() {
             <p>Abilities: {pokemon.abilities.map((abilityInfo) => (
                 <span key={abilityInfo.ability.name}>{abilityInfo.ability.name}</span>
             ))}</p>
+            <div>
+                <p>Pokemon anterior</p>
+                <p>proximo pokemon</p>
+            </div>
         </div>
     )
 }
