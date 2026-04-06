@@ -17,15 +17,17 @@ export function HomePage() {
   if (loading) return <p>Loading...</p>
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Pokédex</h1>
-      <form className="mb-4">
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Procure por nome ou ID"
-          />
-      </form>
+    <div className="max-w-7xl mx-auto px-4 py-8 z-0">
+      {/* Título */}
+      <h1 className="font-display text-neon-green text-sm mb-6 text-center">Buscar Pokemon</h1>
+      <div className="mb-6 flex justify-center">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Procure por nome ou ID..."
+          className="w-full max-w-lg bg-base-card border border-base-border rounded-full px-6 py-3 font-body text-sm text-white placeholder-white/20 focus:outline-none focus:border-neon-green/50 transition-colors"
+        />
+      </div>
       <TypeFilter />
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -38,32 +40,31 @@ export function HomePage() {
         )}
       </div>
 
-      <div className="flex justify-center mt-6">
+      {/* Paginação */}
+      <div className="flex items-center justify-center gap-2 mt-8">
         {currentPage > 0 && (
-          <button onClick={() => setCurrentPage(0)}>«</button>
+          <button
+            onClick={() => setCurrentPage(0)}
+            className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 hover:border-white/40 transition-all"
+          >«</button>
         )}
-
         <button
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 0}
-        >
-          &lt;
-        </button>
-
-        <span className="mx-4">
-          Page {currentPage + 1} of {Math.ceil(totalItems / 24)}
+          className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 disabled:opacity-20 transition-all"
+        >&lt;</button>
+        <span className="font-body text-xs text-white/60 mx-2">
+          {currentPage + 1} / {Math.ceil(totalItems / 24)}
         </span>
-
         <button
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={(currentPage + 1) * 24 >= totalItems}
-        >
-          &gt;
-        </button>
-
-        <button onClick={() => setCurrentPage(Math.ceil(totalItems / 24) - 1)}>»</button>
+          className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 disabled:opacity-20 transition-all"
+        >&gt;</button>
+        <button
+          onClick={() => setCurrentPage(Math.ceil(totalItems / 24) - 1)}
+          className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 transition-all"
+        >»</button>
       </div>
     </div>
   )

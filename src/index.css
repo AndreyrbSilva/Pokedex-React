@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #0a0a0f;
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+}
