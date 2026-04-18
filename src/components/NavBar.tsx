@@ -22,7 +22,7 @@ export function NavBar() {
                         }`}
                         title="Alternar modo shiny"
                     >
-                        ✦ Shiny
+                        🌟 Shiny
                     </button>
                 </div>
             </nav>

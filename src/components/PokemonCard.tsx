@@ -21,7 +21,7 @@ export function PokemonCard({ id }: { id: number }) {
   if (error || !pokemon) {
     return (
       <div className="pokemon-card">
-        <p>Error loading Pokémon</p>
+        <p>Pokémon não encontrado</p>
       </div>
     )
   }
