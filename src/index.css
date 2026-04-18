@@ -7,3 +7,7 @@ body {
   color: white;
   font-family: 'Share Tech Mono', monospace;
 }
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}

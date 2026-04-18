@@ -5,7 +5,7 @@ export function TypeFilter() {
   const { selectedType, setSelectedType, setCurrentPage } = usePokedexStore()
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex flex-wrap justify-center gap-2 mb-4">
       <button
         className="font-body text-xs px-3 py-1 rounded-full border border-base-border text-white/40 hover:text-white/70 transition-all"
         onClick={() => { setSelectedType(''); setCurrentPage(0) }}
