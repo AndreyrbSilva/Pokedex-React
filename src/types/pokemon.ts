@@ -8,6 +8,7 @@ export interface PokemonType {
 export interface PokemonMove {
     move: {
         name: string;
+        url: string;
     };
     version_group_details: {
         level_learned_at: number;
@@ -49,17 +50,33 @@ export interface PokemonSpecies {
             name: string;
         }
     }[];
+
     genera : {
         genus: string;
         language: {
             name: string;
         }
     }[];
+
     is_legendary: boolean;
     is_mythical: boolean;
+
     generation: {
         name: string;
-    }
+    };
+
+    egg_groups: {
+        name: string;
+    }[];
+
+    gender_rate: number;
+
+    hatch_counter: number;
+
+    evolution_chain: {
+        url: string;
+    };
+
     varieties: {
         is_default: boolean;
         pokemon: {
