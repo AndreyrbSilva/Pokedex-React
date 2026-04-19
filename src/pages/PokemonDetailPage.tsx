@@ -15,7 +15,6 @@ function PokemonDetailPage() {
 
   const { pokemon, loading, error } = usePokemon(id ?? '')
   const { species } = usePokemonSpecies(id ?? '')
-
   const { isFavorite, toggleFavorite } = usePokedexStore()
 
   const [showShiny, setShowShiny] = useState(false)
@@ -35,7 +34,6 @@ function PokemonDetailPage() {
   if (!pokemon) return <p className="text-white text-center mt-20 font-body">Pokémon não encontrado</p>
 
   const fav = isFavorite(pokemon.id)
-
   const primaryType = pokemon.types[0]?.type.name ?? 'normal'
   const primaryColor = TYPE_COLORS[primaryType] ?? TYPE_COLORS.normal
 
@@ -57,59 +55,53 @@ function PokemonDetailPage() {
 
   const flavorText =
     species?.flavor_text_entries
-        .find((e) => e.language.name === 'pt')
-        ?.flavor_text
-        .replace(/\f/g, ' ')
-    ??
-    species?.flavor_text_entries
-        .find((e) => e.language.name === 'en')
-        ?.flavor_text
-        .replace(/\f/g, ' ')
+      .find((e) => e.language.name === 'pt')
+      ?.flavor_text.replace(/\f/g, ' ')
+    ?? species?.flavor_text_entries
+      .find((e) => e.language.name === 'en')
+      ?.flavor_text.replace(/\f/g, ' ')
     ?? ''
 
   const genus =
-    species?.genera
-        .find((g) => g.language.name === 'pt')
-        ?.genus
-    ??
-    species?.genera
-        .find((g) => g.language.name === 'en')
-        ?.genus
+    species?.genera.find((g) => g.language.name === 'pt')?.genus
+    ?? species?.genera.find((g) => g.language.name === 'en')?.genus
     ?? ''
 
+  const tabs = [
+    'stats', 'abilities', 'moves', 'breeding',
+    ...(hasCosmeticForms ? ['forms'] : [])
+  ] as const
+
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen relative overflow-hidden pb-24 md:pb-0" style={{ background: '#0a0a0f' }}>
 
       <div
         className="absolute inset-0 pointer-events-none animate-pulsebg"
         style={{ background: `radial-gradient(circle at 50% 35%, ${primaryColor}20, transparent 70%)` }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-10">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-6 md:py-10">
 
         {/* breadcrumb */}
-        <div className="flex items-center gap-2 mb-8 font-body text-xs text-white/30">
-          <Link to="/" className="hover:text-neon-green transition-colors">
-            pokédex
-          </Link>
+        <div className="flex items-center gap-2 mb-6 font-body text-xs text-white/30">
+          <Link to="/" className="hover:text-neon-green transition-colors">pokédex</Link>
           <span>/</span>
           <span style={{ color: primaryColor }}>{pokemon.name}</span>
         </div>
 
         {/* main layout */}
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-10">
 
           {/* LEFT SIDE */}
           <div>
-            {/* image card */}
+            {/* image card — mt-8 só no desktop */}
             <div
-              className="rounded-2xl relative p-8 flex items-center justify-center overflow-visible mt-8"
+              className="rounded-2xl relative p-6 md:p-8 flex items-center justify-center overflow-visible mt-4 md:mt-8"
               style={{
                 background: `radial-gradient(circle at center, ${primaryColor}18 0%, transparent 70%)`,
                 border: `1px solid ${primaryColor}44`
               }}
             >
-              {/* forms alternativas */}
               {species?.varieties && (
                 <PokemonForms
                   baseName={pokemon.name}
@@ -124,7 +116,6 @@ function PokemonDetailPage() {
                 />
               )}
 
-              {/* shiny button */}
               <button
                 onClick={() => setShowShiny(!showShiny)}
                 className="absolute top-3 right-3 font-display text-[8px] px-2 py-1 rounded border"
@@ -136,7 +127,6 @@ function PokemonDetailPage() {
                 🌟 SHINY
               </button>
 
-              {/* favorite */}
               <button
                 onClick={() => toggleFavorite(pokemon.id)}
                 className="absolute top-2 left-5 text-3xl transition-transform hover:scale-125"
@@ -145,26 +135,26 @@ function PokemonDetailPage() {
                 {fav ? '★' : '☆'}
               </button>
 
+              {/* imagem responsiva: menor no mobile */}
               <img
                 src={sprite ?? ''}
                 alt={pokemon.name}
-                className="w-64 h-64 object-contain animate-float"
+                className="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 object-contain animate-float"
                 style={{ filter: `drop-shadow(0 0 24px ${primaryColor}80)` }}
               />
             </div>
 
             {/* pokemon info */}
-            <div className="mt-6">
-
+            <div className="mt-5">
               <p className="font-body text-xs text-white/30">
                 #{String(pokemon.id).padStart(5, '0')} · {genus}
               </p>
 
-              <h1 className="font-display text-3xl capitalize" style={{ color: primaryColor }}>
+              <h1 className="font-display text-2xl md:text-3xl capitalize" style={{ color: primaryColor }}>
                 {(formName ?? pokemon.name).replace(/-/g, ' ')}
               </h1>
 
-              <div className="flex gap-2 mt-2 mb-2">
+              <div className="flex gap-2 mt-2 mb-2 flex-wrap">
                 {pokemon.types.map(({ type }) => (
                   <span
                     key={type.name}
@@ -187,53 +177,46 @@ function PokemonDetailPage() {
                 </p>
               )}
 
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-base-card border border-base-border rounded-lg p-3 text-center">
-                  <p className="text-[12px] text-white/30 mb-1">ALTURA</p>
-                  <p className="font-display text-xs" style={{ color: primaryColor }}>
-                    {(pokemon.height / 10).toFixed(1)}m
-                  </p>
-                </div>
-                <div className="bg-base-card border border-base-border rounded-lg p-3 text-center">
-                  <p className="text-[12px] text-white/30 mb-1">PESO</p>
-                  <p className="font-display text-xs" style={{ color: primaryColor }}>
-                    {(pokemon.weight / 10).toFixed(1)}kg
-                  </p>
-                </div>
-                <div className="bg-base-card border border-base-border rounded-lg p-3 text-center">
-                  <p className="text-[12px] text-white/30 mb-1">GERAÇÃO</p>
-                  <p className="font-display text-xs" style={{ color: primaryColor }}>
-                    {species?.generation.name.replace('generation-', '').toUpperCase() ?? '?'}
-                  </p>
-                </div>
+              {/* grid-cols-3 mas com texto menor no mobile pra não apertar */}
+              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-5">
+                {[
+                  { label: 'ALTURA', value: `${(pokemon.height / 10).toFixed(1)}m` },
+                  { label: 'PESO', value: `${(pokemon.weight / 10).toFixed(1)}kg` },
+                  { label: 'GERAÇÃO', value: species?.generation.name.replace('generation-', '').toUpperCase() ?? '?' },
+                ].map(({ label, value }) => (
+                  <div key={label} className="bg-base-card border border-base-border rounded-lg p-2 md:p-3 text-center">
+                    <p className="text-[10px] md:text-[12px] text-white/30 mb-1">{label}</p>
+                    <p className="font-display text-[10px] md:text-xs" style={{ color: primaryColor }}>{value}</p>
+                  </div>
+                ))}
               </div>
-
             </div>
           </div>
 
           {/* RIGHT SIDE */}
           <div>
 
-            {/* tabs */}
-            <div className="border-b border-base-border flex gap-6 font-display text-xs mb-6">
-              {(['stats', 'abilities', 'moves', 'breeding', ...(hasCosmeticForms ? ['forms'] : [])] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab as any)}
-                  className={`pb-2 uppercase ${
-                    activeTab === tab
-                      ? 'text-neon-green border-b border-neon-green'
-                      : 'text-white/30'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+            {/* tabs — scroll horizontal se não couber */}
+            <div className="border-b border-base-border mb-6 w-full">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-6 font-display text-xs pb-px">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab as any)}
+                    className={`pb-2 uppercase whitespace-nowrap ${
+                      activeTab === tab
+                        ? 'text-neon-green border-b border-neon-green'
+                        : 'text-white/30'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* stats */}
             {activeTab === 'stats' && (
-              <div className="flex flex-col gap-3 min-h-[320px]">
+              <div className="flex flex-col gap-3 min-h-[280px] md:min-h-[320px]">
                 {pokemon.stats.map(({ stat, base_stat }, i) => (
                   <StatBar
                     key={stat.name}
@@ -244,9 +227,7 @@ function PokemonDetailPage() {
                   />
                 ))}
                 <div className="pt-3 border-t border-base-border flex items-center gap-3 mt-3">
-                  <span className="font-display w-16 text-right text-white/40 text-[9px]">
-                    TOTAL
-                  </span>
+                  <span className="font-display w-16 text-right text-white/40 text-[9px]">TOTAL</span>
                   <span className="font-display text-xs" style={{ color: primaryColor }}>
                     {pokemon.stats.reduce((acc, s) => acc + s.base_stat, 0)}
                   </span>
@@ -254,17 +235,13 @@ function PokemonDetailPage() {
               </div>
             )}
 
-            {/* abilities */}
             {activeTab === 'abilities' && (
-              <div className="flex flex-col gap-3 min-h-[320px]">
+              <div className="flex flex-col gap-3 min-h-[280px] md:min-h-[320px]">
                 {pokemon.abilities.map(({ ability, is_hidden }) => (
                   <div
                     key={ability.name}
                     className="px-4 py-3 rounded-lg border"
-                    style={{
-                      background: `${primaryColor}08`,
-                      borderColor: `${primaryColor}25`,
-                    }}
+                    style={{ background: `${primaryColor}08`, borderColor: `${primaryColor}25` }}
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-display text-xs capitalize" style={{ color: primaryColor }}>
@@ -281,17 +258,14 @@ function PokemonDetailPage() {
               </div>
             )}
 
-            {/* moves */}
             {activeTab === 'moves' && (
               <MovesTable moves={pokemon.moves} primaryColor={primaryColor} />
             )}
 
-            {/* breeding */}
             {activeTab === 'breeding' && species && (
               <BreedingTab species={species} primaryColor={primaryColor} />
             )}
 
-            {/* forms cosméticas */}
             {activeTab === 'forms' && species?.varieties && (
               <FormsTab
                 baseName={pokemon.name}
@@ -305,7 +279,6 @@ function PokemonDetailPage() {
               />
             )}
 
-            {/* evolution chain */}
             {species?.evolution_chain?.url && (
               <EvolutionChain
                 chainUrl={species.evolution_chain.url}
@@ -316,12 +289,11 @@ function PokemonDetailPage() {
                 activeFormSuffix={activeFormSuffix}
               />
             )}
-
           </div>
         </div>
 
-        {/* navigation */}
-        <div className="flex items-center justify-center gap-4 mt-12">
+        {/* navigation prev/next */}
+        <div className="flex items-center justify-center gap-4 mt-10 md:mt-12">
           {pokemon.id > 1 && (
             <Link
               to={`/pokemon/${pokemon.id - 1}`}

@@ -32,7 +32,7 @@ export function HomePage() {
   if (loading) return <p>Loading...</p>
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 z-0">
+    <div className="max-w-7xl mx-auto px-4 py-8 pb-28 md:pb-8 z-0">
 
       <h1 className="font-display text-neon-green text-sm mb-6 text-center">Buscar Pokemon</h1>
 
@@ -46,6 +46,35 @@ export function HomePage() {
       </div>
 
       <TypeFilter />
+
+      {/* paginação */}
+      {!search && (
+        <div className="flex items-center justify-center gap-2 mt-6 mb-6">
+          {currentPage > 0 && (
+            <button
+              onClick={() => setCurrentPage(0)}
+              className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 hover:border-white/40 transition-all"
+            >«</button>
+          )}
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 disabled:opacity-20 transition-all"
+          >&lt;</button>
+          <span className="font-body text-xs text-white/60 mx-2">
+            {currentPage + 1} / {Math.ceil(totalItems / 24)}
+          </span>
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={(currentPage + 1) * 24 >= totalItems}
+            className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 disabled:opacity-20 transition-all"
+          >&gt;</button>
+          <button
+            onClick={() => setCurrentPage(Math.ceil(totalItems / 24) - 1)}
+            className="font-display text-xs px-3 py-2 rounded border border-base-border text-white/30 hover:text-white/70 transition-all"
+          >»</button>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {search ? (

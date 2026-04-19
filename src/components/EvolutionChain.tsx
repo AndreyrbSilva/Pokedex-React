@@ -136,9 +136,9 @@ export function EvolutionChain({ chainUrl, primaryColor, showShiny, activeFormSu
   if (paths.length === 1 && paths[0].length === 1) return null
 
   return (
-    <div className="mt-8">
+    <div className="mt-4">
       <h2
-        className="font-display text-[9px] mb-4 tracking-widest"
+        className="font-display text-[9px] mb-4 tracking-widest text-center"
         style={{ color: `${primaryColor}70` }}
       >
         EVOLUTION CHAIN
@@ -146,7 +146,7 @@ export function EvolutionChain({ chainUrl, primaryColor, showShiny, activeFormSu
 
       <div className="flex flex-col gap-3">
         {paths.map((path, pi) => (
-          <div key={pi} className="flex items-center gap-1 flex-wrap">
+          <div key={pi} className="flex items-center gap-1 flex-wrap justify-center">
             {path.map((step, si) => (
               <div key={step.id} className="flex items-center gap-1">
                 {si > 0 && <EvoArrow step={step} />}

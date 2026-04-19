@@ -64,7 +64,7 @@ export function PokemonCard({ id }: { id: number }) {
               : pokemon.sprites.other["official-artwork"].front_default
           }
           alt={pokemon.name}
-          className="h-28 w-28 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-110"
+          className="h-20 w-20 sm:h-28 sm:w-28 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-110"
         />
       </div>
 
@@ -75,7 +75,7 @@ export function PokemonCard({ id }: { id: number }) {
         >
           #{String(pokemon.id).padStart(3, "0")}
         </p>
-        <h3 className="font-body text-sm capitalize text-white mb-2">
+        <h3 className="font-body text-xs sm:text-sm capitalize text-white mb-2">
           {pokemon.name}
         </h3>
         <div className="flex gap-1 flex-wrap">
