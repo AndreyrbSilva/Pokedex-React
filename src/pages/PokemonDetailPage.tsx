@@ -8,6 +8,7 @@ import { MovesTable } from '../components/MovesTable'
 import { EvolutionChain } from '../components/EvolutionChain'
 import { PokemonForms } from '../components/PokemonForms'
 import { BreedingTab } from '../components/BreedingTab'
+import { FormsTab, COSMETIC_SUFFIXES } from '../components/FormsTab'
 
 function PokemonDetailPage() {
   const { id } = useParams()
@@ -18,7 +19,7 @@ function PokemonDetailPage() {
   const { isFavorite, toggleFavorite } = usePokedexStore()
 
   const [showShiny, setShowShiny] = useState(false)
-  const [activeTab, setActiveTab] = useState<'stats' | 'abilities' | 'moves' | 'breeding'>('stats')
+  const [activeTab, setActiveTab] = useState<'stats' | 'abilities' | 'moves' | 'breeding' | 'forms'>('stats')
   const [formSprite, setFormSprite] = useState<string | null>(null)
   const [formName, setFormName] = useState<string | null>(null)
   const [formId, setFormId] = useState<number | null>(null)
@@ -38,13 +39,18 @@ function PokemonDetailPage() {
   const primaryType = pokemon.types[0]?.type.name ?? 'normal'
   const primaryColor = TYPE_COLORS[primaryType] ?? TYPE_COLORS.normal
 
+  const hasCosmeticForms = species?.varieties?.some((v) => {
+    if (v.is_default) return false
+    const suffix = v.pokemon.name.replace(`${pokemon.name}-`, '')
+    return COSMETIC_SUFFIXES.includes(suffix)
+  }) ?? false
+
   const sprite = formSprite
     ? formSprite
     : showShiny
       ? pokemon.sprites.other["official-artwork"].front_shiny
       : pokemon.sprites.other["official-artwork"].front_default
 
-  // detecta o sufixo da forma ativa ex: "vulpix-alola" → "alola"
   const activeFormSuffix = formName
     ? formName.replace(`${pokemon.name}-`, '')
     : null
@@ -210,10 +216,10 @@ function PokemonDetailPage() {
 
             {/* tabs */}
             <div className="border-b border-base-border flex gap-6 font-display text-xs mb-6">
-              {(['stats', 'abilities', 'moves', 'breeding'] as const).map((tab) => (
+              {(['stats', 'abilities', 'moves', 'breeding', ...(hasCosmeticForms ? ['forms'] : [])] as const).map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => setActiveTab(tab as any)}
                   className={`pb-2 uppercase ${
                     activeTab === tab
                       ? 'text-neon-green border-b border-neon-green'
@@ -283,6 +289,20 @@ function PokemonDetailPage() {
             {/* breeding */}
             {activeTab === 'breeding' && species && (
               <BreedingTab species={species} primaryColor={primaryColor} />
+            )}
+
+            {/* forms cosméticas */}
+            {activeTab === 'forms' && species?.varieties && (
+              <FormsTab
+                baseName={pokemon.name}
+                varieties={species.varieties}
+                showShiny={showShiny}
+                primaryColor={primaryColor}
+                onSpriteChange={(sprite, name) => {
+                  setFormSprite(sprite)
+                  setFormName(name)
+                }}
+              />
             )}
 
             {/* evolution chain */}

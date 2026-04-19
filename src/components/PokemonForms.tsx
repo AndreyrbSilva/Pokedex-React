@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { COSMETIC_SUFFIXES } from './FormsTab'
 
 interface Variety {
   is_default: boolean
@@ -85,7 +86,12 @@ export function PokemonForms({ baseName, varieties, showShiny, primaryColor, onS
 
   const altForms = varieties
     .filter((v) => !v.is_default)
-    .filter((v) => getSuffix(baseName, v.pokemon.name) !== null)
+    .filter((v) => {
+      const suffix = getSuffix(baseName, v.pokemon.name)
+      if (!suffix) return false
+      if (COSMETIC_SUFFIXES.includes(suffix)) return false
+      return true
+    })
 
   if (altForms.length === 0) return null
 
