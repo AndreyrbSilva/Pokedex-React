@@ -10,7 +10,7 @@ export function NavBar() {
       {/* Top bar */}
       <nav className="sticky top-0 flex items-center justify-between px-6 py-4 bg-base-bg/90 border-b border-base-border backdrop-blur-md z-50">
         <Link className="no-underline font-display text-xss text-neon-green" to="/">
-          Pokédex
+          myPokédex
         </Link>
 
         <div className="flex items-center gap-4">

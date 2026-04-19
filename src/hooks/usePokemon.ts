@@ -109,3 +109,19 @@ export function useMove(name: string) {
 
   return { move, loading }
 }
+
+export function useAllPokemon() {
+  const [list, setList] = useState<{ name: string; url: string }[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=100000')
+      .then(res => res.json())
+      .then(data => {
+        setList(data.results)
+        setLoading(false)
+      })
+  }, [])
+
+  return { list, loading }
+}

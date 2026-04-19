@@ -59,9 +59,11 @@ export function PokemonCard({ id }: { id: number }) {
       >
         <img
           src={
-            shinyMode
-              ? pokemon.sprites.other["official-artwork"].front_shiny
-              : pokemon.sprites.other["official-artwork"].front_default
+            (
+              shinyMode
+                ? pokemon.sprites.other["official-artwork"].front_shiny
+                : pokemon.sprites.other["official-artwork"].front_default
+            ) ?? undefined
           }
           alt={pokemon.name}
           className="h-20 w-20 sm:h-28 sm:w-28 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-110"
