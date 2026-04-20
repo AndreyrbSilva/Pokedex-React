@@ -15,6 +15,9 @@ export interface PokemonMove {
         move_learn_method: {
             name: string;
         };
+        version_group: {
+            name: string;
+        };
     }[];
 }
 

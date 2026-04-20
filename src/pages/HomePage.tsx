@@ -13,7 +13,6 @@ export function HomePage() {
 
   const [search, setSearch] = useState('')
 
-  // 🔍 busca dinâmica
   const filtered = allPokemon.filter((p) => {
     const name = p.name.toLowerCase()
     const q = search.toLowerCase().trim()
@@ -25,7 +24,6 @@ export function HomePage() {
     parseInt(p.url.split('/').filter(Boolean).pop()!)
   )
 
-  // 📦 lista padrão (sem busca)
   const displayIds = selectedType
     ? ids.slice(currentPage * 24, (currentPage + 1) * 24)
     : list.map((p) => parseInt(p.url.split('/').filter(Boolean).pop()!))
@@ -46,7 +44,7 @@ export function HomePage() {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value)
-            setCurrentPage(0) // 🔥 reseta página ao buscar
+            setCurrentPage(0)
           }}
           placeholder="Procure por nome ou ID..."
           className="w-full max-w-lg bg-base-card border border-base-border rounded-full px-6 py-3 font-body text-sm text-white placeholder-white/20 focus:outline-none focus:border-neon-green/50 transition-colors"
