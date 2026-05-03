@@ -32,7 +32,7 @@ export const usePokedexStore = create<PokedexState>()(
       selectedType: '',
       setSelectedType: (type) => set({ selectedType: type }),
 
-      currentPage: 1,
+      currentPage: 0,
       setCurrentPage: (page) => set({ currentPage: page }),
 
       shinyMode: false,
